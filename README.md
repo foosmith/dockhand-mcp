@@ -1,6 +1,6 @@
 # dockhand-mcp
 
-A [Model Context Protocol](https://modelcontextprotocol.io) server that connects Claude Desktop to your [Dockhand](https://github.com/dockhand/dockhand) Docker management instance. Control containers and Compose stacks through natural conversation.
+A [Model Context Protocol](https://modelcontextprotocol.io) server that connects Claude Desktop or Claude CLI to your [Dockhand](https://github.com/dockhand/dockhand) Docker management instance. Control containers and Compose stacks through natural conversation.
 
 ## What Claude Can Do
 
@@ -20,7 +20,7 @@ A [Model Context Protocol](https://modelcontextprotocol.io) server that connects
 
 - [Node.js LTS](https://nodejs.org) (v20 or later)
 - A running Dockhand instance accessible from your machine
-- [Claude Desktop](https://claude.ai/download)
+- [Claude Desktop](https://claude.ai/download) or [Claude CLI](https://github.com/anthropics/claude-code)
 
 ## Setup
 
@@ -90,6 +90,29 @@ Replace `/full/path/to/dockhand-mcp` with the actual path where you cloned the r
 After saving the config, fully quit and relaunch Claude Desktop. You should see a hammer icon in the chat input indicating MCP tools are loaded.
 
 Type **"List my Dockhand containers"** to verify everything is working.
+
+---
+
+## Claude CLI Setup
+
+If you use [Claude CLI](https://github.com/anthropics/claude-code) instead of Claude Desktop, register the server with one command:
+
+```bash
+claude mcp add dockhand node /full/path/to/dockhand-mcp/dist/index.js \
+  --scope user \
+  -e DOCKHAND_URL=http://your-dockhand-host:port \
+  -e DOCKHAND_USERNAME=claude \
+  -e DOCKHAND_PASSWORD=your_password_here
+```
+
+Then start a new Claude CLI session and try: **"List my Dockhand containers"**
+
+To verify registration or remove it:
+
+```bash
+claude mcp list
+claude mcp remove dockhand
+```
 
 ## Authentication
 
