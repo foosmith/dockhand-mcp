@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { dockhandRequest } from "../dockhand.js";
+import { dockhandRequest, envParam } from "../dockhand.js";
 
 export function registerStackTools(server: McpServer): void {
   server.tool(
@@ -8,7 +8,7 @@ export function registerStackTools(server: McpServer): void {
     "List all Docker Compose stacks and their current status",
     {},
     async () => {
-      const stacks = await dockhandRequest<unknown[]>("/api/stacks");
+      const stacks = await dockhandRequest<unknown[]>(`/api/stacks?${envParam}`);
       return {
         content: [{ type: "text", text: JSON.stringify(stacks, null, 2) }],
       };
@@ -20,7 +20,7 @@ export function registerStackTools(server: McpServer): void {
     "Deploy or redeploy a Docker Compose stack by its ID or name",
     { id: z.string().describe("Stack ID or name") },
     async ({ id }) => {
-      await dockhandRequest(`/api/stacks/${encodeURIComponent(id)}/deploy`, {
+      await dockhandRequest(`/api/stacks/${encodeURIComponent(id)}/deploy?${envParam}`, {
         method: "POST",
       });
       return {
@@ -34,7 +34,7 @@ export function registerStackTools(server: McpServer): void {
     "Start all containers in a Docker Compose stack",
     { id: z.string().describe("Stack ID or name") },
     async ({ id }) => {
-      await dockhandRequest(`/api/stacks/${encodeURIComponent(id)}/start`, {
+      await dockhandRequest(`/api/stacks/${encodeURIComponent(id)}/start?${envParam}`, {
         method: "POST",
       });
       return {
@@ -48,7 +48,7 @@ export function registerStackTools(server: McpServer): void {
     "Stop all containers in a Docker Compose stack",
     { id: z.string().describe("Stack ID or name") },
     async ({ id }) => {
-      await dockhandRequest(`/api/stacks/${encodeURIComponent(id)}/stop`, {
+      await dockhandRequest(`/api/stacks/${encodeURIComponent(id)}/stop?${envParam}`, {
         method: "POST",
       });
       return {

@@ -4,6 +4,9 @@ dotenv.config();
 const BASE_URL = process.env.DOCKHAND_URL ?? "";
 const USERNAME = process.env.DOCKHAND_USERNAME ?? "";
 const PASSWORD = process.env.DOCKHAND_PASSWORD ?? "";
+const ENV_ID = process.env.DOCKHAND_ENV_ID ?? "1";
+
+export const envParam = `env=${ENV_ID}`;
 
 let sessionCookie: string | null = null;
 

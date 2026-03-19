@@ -1,6 +1,6 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { dockhandRequest } from "../dockhand.js";
+import { dockhandRequest, envParam } from "../dockhand.js";
 
 export function registerContainerTools(server: McpServer): void {
   server.tool(
@@ -8,7 +8,7 @@ export function registerContainerTools(server: McpServer): void {
     "List all Docker containers with their status, CPU, and memory usage",
     {},
     async () => {
-      const containers = await dockhandRequest<unknown[]>("/api/containers");
+      const containers = await dockhandRequest<unknown[]>(`/api/containers?${envParam}`);
       return {
         content: [{ type: "text", text: JSON.stringify(containers, null, 2) }],
       };
@@ -20,7 +20,7 @@ export function registerContainerTools(server: McpServer): void {
     "Start a stopped Docker container by its ID or name",
     { id: z.string().describe("Container ID or name") },
     async ({ id }) => {
-      await dockhandRequest(`/api/containers/${encodeURIComponent(id)}/start`, {
+      await dockhandRequest(`/api/containers/${encodeURIComponent(id)}/start?${envParam}`, {
         method: "POST",
       });
       return {
@@ -34,7 +34,7 @@ export function registerContainerTools(server: McpServer): void {
     "Stop a running Docker container by its ID or name",
     { id: z.string().describe("Container ID or name") },
     async ({ id }) => {
-      await dockhandRequest(`/api/containers/${encodeURIComponent(id)}/stop`, {
+      await dockhandRequest(`/api/containers/${encodeURIComponent(id)}/stop?${envParam}`, {
         method: "POST",
       });
       return {
@@ -49,7 +49,7 @@ export function registerContainerTools(server: McpServer): void {
     { id: z.string().describe("Container ID or name") },
     async ({ id }) => {
       await dockhandRequest(
-        `/api/containers/${encodeURIComponent(id)}/restart`,
+        `/api/containers/${encodeURIComponent(id)}/restart?${envParam}`,
         { method: "POST" }
       );
       return {
@@ -73,7 +73,7 @@ export function registerContainerTools(server: McpServer): void {
     },
     async ({ id, lines }) => {
       const logs = await dockhandRequest<string>(
-        `/api/containers/${encodeURIComponent(id)}/logs?lines=${lines}`
+        `/api/containers/${encodeURIComponent(id)}/logs?lines=${lines}&${envParam}`
       );
       return {
         content: [
