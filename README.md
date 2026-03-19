@@ -1,6 +1,6 @@
 # dockhand-mcp
 
-A [Model Context Protocol](https://modelcontextprotocol.io) server that connects Claude Desktop or Claude CLI to your [Dockhand](https://github.com/dockhand/dockhand) Docker management instance. Control containers and Compose stacks through natural conversation.
+A [Model Context Protocol](https://modelcontextprotocol.io) server that connects Claude Desktop or Claude CLI to your [Dockhand](https://github.com/fnsys/dockhand) Docker management instance. Control containers and Compose stacks through natural conversation.
 
 ## What Claude Can Do
 
@@ -26,7 +26,28 @@ A [Model Context Protocol](https://modelcontextprotocol.io) server that connects
 - A running Dockhand instance accessible from your machine
 - [Claude Desktop](https://claude.ai/download) or [Claude CLI](https://github.com/anthropics/claude-code)
 
-## Setup
+## Claude CLI Setup
+
+If you use [Claude CLI](https://github.com/anthropics/claude-code) instead of Claude Desktop, register the server with one command:
+
+```bash
+claude mcp add dockhand node /full/path/to/dockhand-mcp/dist/index.js \
+  --scope user \
+  -e DOCKHAND_URL=http://your-dockhand-host:port \
+  -e DOCKHAND_USERNAME=claude \
+  -e DOCKHAND_PASSWORD=your_password_here
+```
+
+Then start a new Claude CLI session and try: **"List my Dockhand containers"**
+
+To verify registration or remove it:
+
+```bash
+claude mcp list
+claude mcp remove dockhand
+```
+
+## Claude App (Desktop) Setup
 
 ### 1. Clone and install
 
@@ -97,30 +118,9 @@ Type **"List my Dockhand containers"** to verify everything is working.
 
 ---
 
-## Claude CLI Setup
-
-If you use [Claude CLI](https://github.com/anthropics/claude-code) instead of Claude Desktop, register the server with one command:
-
-```bash
-claude mcp add dockhand node /full/path/to/dockhand-mcp/dist/index.js \
-  --scope user \
-  -e DOCKHAND_URL=http://your-dockhand-host:port \
-  -e DOCKHAND_USERNAME=claude \
-  -e DOCKHAND_PASSWORD=your_password_here
-```
-
-Then start a new Claude CLI session and try: **"List my Dockhand containers"**
-
-To verify registration or remove it:
-
-```bash
-claude mcp list
-claude mcp remove dockhand
-```
-
 ## Authentication
 
-Dockhand v1.16 uses session-based authentication. The MCP server:
+Dockhand uses session-based authentication. The MCP server:
 
 - Logs in automatically on first use via `POST /api/auth/login`
 - Stores the session cookie in memory
