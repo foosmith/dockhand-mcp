@@ -140,6 +140,19 @@ Dockhand uses session-based authentication. The MCP server:
 
 No manual session management needed.
 
+## Upgrading
+
+To pull the latest changes and rebuild:
+
+```bash
+cd dockhand-mcp
+git pull
+npm install
+npm run build
+```
+
+Then restart Claude Desktop or start a new Claude CLI session to load the updated server.
+
 ## Troubleshooting
 
 **Hammer icon doesn't appear in Claude Desktop**
@@ -153,19 +166,6 @@ No manual session management needed.
 
 **Network not reachable**
 - This server makes outbound HTTP calls to your Dockhand instance. If Dockhand is on a local network, you must be on the same network (or VPN) for it to work.
-
-## Updating
-
-To pull the latest changes and rebuild:
-
-```bash
-cd dockhand-mcp
-git pull
-npm install
-npm run build
-```
-
-Then restart Claude Desktop or start a new Claude CLI session to load the updated server.
 
 ## Development
 
