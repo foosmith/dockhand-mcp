@@ -38,9 +38,28 @@ A [Model Context Protocol](https://modelcontextprotocol.io) server that connects
 - A running Dockhand instance accessible from your machine
 - [Claude Desktop](https://claude.ai/download) or [Claude CLI](https://github.com/anthropics/claude-code)
 
-## Claude CLI Setup
+## Installation
 
-If you use [Claude CLI](https://github.com/anthropics/claude-code) instead of Claude Desktop, register the server with one command:
+### 1. Clone and build
+
+```bash
+git clone https://github.com/foosmith/dockhand-mcp.git
+cd dockhand-mcp
+npm install
+npm run build
+```
+
+This compiles TypeScript to `dist/`. Note the full path to this directory — you'll need it in the next step.
+
+> **Tip:** Create a dedicated `claude` user in Dockhand (Settings > Authentication > Add User) rather than using your admin account. This gives you a clean audit trail.
+
+### 2. Connect to Claude
+
+Choose the client you use:
+
+#### Claude CLI
+
+Register the server with a single command, replacing the path and credentials with your own:
 
 ```bash
 claude mcp add dockhand node /full/path/to/dockhand-mcp/dist/index.js \
@@ -50,7 +69,7 @@ claude mcp add dockhand node /full/path/to/dockhand-mcp/dist/index.js \
   -e DOCKHAND_PASSWORD=your_password_here
 ```
 
-Then start a new Claude CLI session and try: **"List my Dockhand containers"**
+Start a new Claude CLI session and try: **"List my Dockhand containers"**
 
 To verify registration or remove it:
 
@@ -59,41 +78,7 @@ claude mcp list
 claude mcp remove dockhand
 ```
 
-## Claude App (Desktop) Setup
-
-### 1. Clone and install
-
-```bash
-git clone https://github.com/foosmith/dockhand-mcp.git
-cd dockhand-mcp
-npm install
-```
-
-### 2. Configure credentials
-
-```bash
-cp .env.example .env
-```
-
-Edit `.env` with your Dockhand details:
-
-```env
-DOCKHAND_URL=http://192.168.1.100:30328
-DOCKHAND_USERNAME=claude
-DOCKHAND_PASSWORD=your_password_here
-```
-
-> **Tip:** Create a dedicated `claude` user in Dockhand (Settings > Authentication > Add User) rather than using your admin account. This gives you a clean audit trail.
-
-### 3. Build
-
-```bash
-npm run build
-```
-
-This compiles TypeScript to `dist/`.
-
-### 4. Configure Claude Desktop
+#### Claude Desktop
 
 Open the Claude Desktop config file:
 
@@ -122,9 +107,7 @@ Replace `/full/path/to/dockhand-mcp` with the actual path where you cloned the r
 
 > **Note:** On Windows, use forward slashes or escaped backslashes in the path, e.g. `C:/Users/you/dockhand-mcp/dist/index.js`.
 
-### 5. Restart Claude Desktop
-
-After saving the config, fully quit and relaunch Claude Desktop. You should see a hammer icon in the chat input indicating MCP tools are loaded.
+Fully quit and relaunch Claude Desktop. You should see a hammer icon in the chat input indicating MCP tools are loaded.
 
 Type **"List my Dockhand containers"** to verify everything is working.
 
