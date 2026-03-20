@@ -85,4 +85,60 @@ export function registerContainerTools(server: McpServer): void {
       };
     }
   );
+
+  server.tool(
+    "inspect_container",
+    "Get detailed configuration and state information for a Docker container",
+    { id: z.string().describe("Container ID or name") },
+    async ({ id }) => {
+      const info = await dockhandRequest<unknown>(
+        `/api/containers/${encodeURIComponent(id)}?${envParam}`
+      );
+      return {
+        content: [{ type: "text", text: JSON.stringify(info, null, 2) }],
+      };
+    }
+  );
+
+  server.tool(
+    "pause_container",
+    "Pause a running Docker container (suspends all processes)",
+    { id: z.string().describe("Container ID or name") },
+    async ({ id }) => {
+      await dockhandRequest(`/api/containers/${encodeURIComponent(id)}/pause?${envParam}`, {
+        method: "POST",
+      });
+      return {
+        content: [{ type: "text", text: `Container '${id}' paused.` }],
+      };
+    }
+  );
+
+  server.tool(
+    "unpause_container",
+    "Unpause a paused Docker container (resumes all processes)",
+    { id: z.string().describe("Container ID or name") },
+    async ({ id }) => {
+      await dockhandRequest(`/api/containers/${encodeURIComponent(id)}/unpause?${envParam}`, {
+        method: "POST",
+      });
+      return {
+        content: [{ type: "text", text: `Container '${id}' unpaused.` }],
+      };
+    }
+  );
+
+  server.tool(
+    "remove_container",
+    "Remove a stopped Docker container",
+    { id: z.string().describe("Container ID or name") },
+    async ({ id }) => {
+      await dockhandRequest(`/api/containers/${encodeURIComponent(id)}?${envParam}`, {
+        method: "DELETE",
+      });
+      return {
+        content: [{ type: "text", text: `Container '${id}' removed.` }],
+      };
+    }
+  );
 }
