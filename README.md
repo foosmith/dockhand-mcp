@@ -11,14 +11,26 @@ A [Model Context Protocol](https://modelcontextprotocol.io) server that connects
 | "Stop container abc123" | `stop_container` |
 | "Restart the api container" | `restart_container` |
 | "Show me the last 200 lines of logs for redis" | `get_container_logs` |
+| "Inspect the api container" | `inspect_container` |
+| "Pause the worker container" | `pause_container` |
+| "Unpause the worker container" | `unpause_container` |
+| "Remove the stopped test container" | `remove_container` |
 | "List my stacks" | `list_stacks` |
 | "Deploy the monitoring stack" | `deploy_stack` |
 | "Start the media stack" | `start_stack` |
 | "Stop the dev stack" | `stop_stack` |
 | "What Docker environments are configured?" | `list_environments` |
 | "Show me all Docker networks" | `list_networks` |
+| "Inspect the my-network network" | `inspect_network` |
+| "Create a new network called lab" | `create_network` |
+| "Remove the old-network network" | `remove_network` |
 | "List my Docker volumes" | `list_volumes` |
+| "Inspect the postgres-data volume" | `inspect_volume` |
+| "Remove the unused backup volume" | `remove_volume` |
 | "What images are on the host?" | `list_images` |
+| "Inspect the nginx:latest image" | `inspect_image` |
+| "Remove the old alpine image" | `remove_image` |
+| "Clean up unused images" | `prune_images` |
 
 ## Prerequisites
 

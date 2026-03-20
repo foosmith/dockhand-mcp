@@ -9,7 +9,7 @@ import { registerImageTools } from "./tools/images.js";
 
 const server = new McpServer({
   name: "dockhand-mcp",
-  version: "1.0.0",
+  version: "1.1.0",
 });
 
 registerContainerTools(server);
