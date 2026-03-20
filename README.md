@@ -31,6 +31,7 @@ A [Model Context Protocol](https://modelcontextprotocol.io) server that connects
 | "Inspect the nginx:latest image" | `inspect_image` |
 | "Remove the old alpine image" | `remove_image` |
 | "Clean up unused images" | `prune_images` |
+| "What version of dockhand-mcp is running?" | `get_version` |
 
 ## Prerequisites
 

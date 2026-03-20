@@ -7,10 +7,16 @@ import { registerNetworkTools } from "./tools/networks.js";
 import { registerVolumeTools } from "./tools/volumes.js";
 import { registerImageTools } from "./tools/images.js";
 
+const VERSION = "1.1.0";
+
 const server = new McpServer({
   name: "dockhand-mcp",
-  version: "1.1.0",
+  version: VERSION,
 });
+
+server.tool("get_version", "Returns the running dockhand-mcp server version", {}, async () => ({
+  content: [{ type: "text", text: VERSION }],
+}));
 
 registerContainerTools(server);
 registerStackTools(server);
