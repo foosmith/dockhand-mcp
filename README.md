@@ -1,6 +1,6 @@
 # dockhand-mcp
 
-A [Model Context Protocol](https://modelcontextprotocol.io) server that connects Claude Desktop or Claude CLI to your [Dockhand](https://github.com/fnsys/dockhand) Docker management instance. Control containers and Compose stacks through natural conversation.
+A [Model Context Protocol](https://modelcontextprotocol.io) server that connects Claude Desktop or Claude CLI to your [Dockhand](https://github.com/Finsys/dockhand) Docker management instance. Control containers and Compose stacks through natural conversation.
 
 ## What Claude Can Do
 
