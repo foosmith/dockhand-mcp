@@ -56,4 +56,18 @@ export function registerStackTools(server: McpServer): void {
       };
     }
   );
+
+  server.tool(
+    "sync_stack",
+    "Pull latest changes from the git repository and redeploy a git-backed Docker Compose stack",
+    { id: z.string().describe("Git stack ID or name") },
+    async ({ id }) => {
+      await dockhandRequest(`/api/git/stacks/${encodeURIComponent(id)}/sync?${envParam}`, {
+        method: "POST",
+      });
+      return {
+        content: [{ type: "text", text: `Git stack '${id}' synced and redeployed successfully.` }],
+      };
+    }
+  );
 }

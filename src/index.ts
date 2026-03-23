@@ -7,7 +7,7 @@ import { registerNetworkTools } from "./tools/networks.js";
 import { registerVolumeTools } from "./tools/volumes.js";
 import { registerImageTools } from "./tools/images.js";
 
-const VERSION = "1.1.0";
+const VERSION = "1.2.0";
 
 const server = new McpServer({
   name: "dockhand-mcp",
