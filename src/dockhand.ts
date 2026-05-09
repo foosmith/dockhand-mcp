@@ -1,12 +1,31 @@
 import * as dotenv from "dotenv";
+import { z } from "zod";
 dotenv.config();
 
 const BASE_URL = process.env.DOCKHAND_URL ?? "";
 const USERNAME = process.env.DOCKHAND_USERNAME ?? "";
 const PASSWORD = process.env.DOCKHAND_PASSWORD ?? "";
-const ENV_ID = process.env.DOCKHAND_ENV_ID ?? "1";
+const DEFAULT_ENV_ID = process.env.DOCKHAND_ENV_ID ?? "1";
 
-export const envParam = `env=${ENV_ID}`;
+/**
+ * Build the `env=N` query-string fragment for a Dockhand API call.
+ * Falls back to DOCKHAND_ENV_ID (or "1") when no override is provided.
+ */
+export function envQuery(envId?: string | number): string {
+  return `env=${envId ?? DEFAULT_ENV_ID}`;
+}
+
+/**
+ * Shared zod schema for the optional `environmentId` parameter on every
+ * environment-scoped tool. Lets MCP clients target a specific Dockhand
+ * environment per call without restarting the server.
+ */
+export const environmentIdSchema = z
+  .union([z.string(), z.number()])
+  .optional()
+  .describe(
+    "Optional Dockhand environment ID to target. Use list_environments to find IDs. Defaults to DOCKHAND_ENV_ID env var (or 1)."
+  );
 
 let sessionCookie: string | null = null;
 
