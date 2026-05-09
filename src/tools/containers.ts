@@ -1,14 +1,16 @@
 import { McpServer } from "@modelcontextprotocol/sdk/server/mcp.js";
 import { z } from "zod";
-import { dockhandRequest, envParam } from "../dockhand.js";
+import { dockhandRequest, envQuery, environmentIdSchema } from "../dockhand.js";
 
 export function registerContainerTools(server: McpServer): void {
   server.tool(
     "list_containers",
     "List all Docker containers with their status, CPU, and memory usage",
-    {},
-    async () => {
-      const containers = await dockhandRequest<unknown[]>(`/api/containers?${envParam}`);
+    { environmentId: environmentIdSchema },
+    async ({ environmentId }) => {
+      const containers = await dockhandRequest<unknown[]>(
+        `/api/containers?${envQuery(environmentId)}`
+      );
       return {
         content: [{ type: "text", text: JSON.stringify(containers, null, 2) }],
       };
@@ -18,11 +20,15 @@ export function registerContainerTools(server: McpServer): void {
   server.tool(
     "start_container",
     "Start a stopped Docker container by its ID or name",
-    { id: z.string().describe("Container ID or name") },
-    async ({ id }) => {
-      await dockhandRequest(`/api/containers/${encodeURIComponent(id)}/start?${envParam}`, {
-        method: "POST",
-      });
+    {
+      id: z.string().describe("Container ID or name"),
+      environmentId: environmentIdSchema,
+    },
+    async ({ id, environmentId }) => {
+      await dockhandRequest(
+        `/api/containers/${encodeURIComponent(id)}/start?${envQuery(environmentId)}`,
+        { method: "POST" }
+      );
       return {
         content: [{ type: "text", text: `Container '${id}' started successfully.` }],
       };
@@ -32,11 +38,15 @@ export function registerContainerTools(server: McpServer): void {
   server.tool(
     "stop_container",
     "Stop a running Docker container by its ID or name",
-    { id: z.string().describe("Container ID or name") },
-    async ({ id }) => {
-      await dockhandRequest(`/api/containers/${encodeURIComponent(id)}/stop?${envParam}`, {
-        method: "POST",
-      });
+    {
+      id: z.string().describe("Container ID or name"),
+      environmentId: environmentIdSchema,
+    },
+    async ({ id, environmentId }) => {
+      await dockhandRequest(
+        `/api/containers/${encodeURIComponent(id)}/stop?${envQuery(environmentId)}`,
+        { method: "POST" }
+      );
       return {
         content: [{ type: "text", text: `Container '${id}' stopped successfully.` }],
       };
@@ -46,10 +56,13 @@ export function registerContainerTools(server: McpServer): void {
   server.tool(
     "restart_container",
     "Restart a Docker container by its ID or name",
-    { id: z.string().describe("Container ID or name") },
-    async ({ id }) => {
+    {
+      id: z.string().describe("Container ID or name"),
+      environmentId: environmentIdSchema,
+    },
+    async ({ id, environmentId }) => {
       await dockhandRequest(
-        `/api/containers/${encodeURIComponent(id)}/restart?${envParam}`,
+        `/api/containers/${encodeURIComponent(id)}/restart?${envQuery(environmentId)}`,
         { method: "POST" }
       );
       return {
@@ -70,10 +83,11 @@ export function registerContainerTools(server: McpServer): void {
         .max(1000)
         .default(100)
         .describe("Number of log lines to retrieve (default 100)"),
+      environmentId: environmentIdSchema,
     },
-    async ({ id, lines }) => {
+    async ({ id, lines, environmentId }) => {
       const logs = await dockhandRequest<string>(
-        `/api/containers/${encodeURIComponent(id)}/logs?lines=${lines}&${envParam}`
+        `/api/containers/${encodeURIComponent(id)}/logs?lines=${lines}&${envQuery(environmentId)}`
       );
       return {
         content: [
@@ -89,10 +103,13 @@ export function registerContainerTools(server: McpServer): void {
   server.tool(
     "inspect_container",
     "Get detailed configuration and state information for a Docker container",
-    { id: z.string().describe("Container ID or name") },
-    async ({ id }) => {
+    {
+      id: z.string().describe("Container ID or name"),
+      environmentId: environmentIdSchema,
+    },
+    async ({ id, environmentId }) => {
       const info = await dockhandRequest<unknown>(
-        `/api/containers/${encodeURIComponent(id)}?${envParam}`
+        `/api/containers/${encodeURIComponent(id)}?${envQuery(environmentId)}`
       );
       return {
         content: [{ type: "text", text: JSON.stringify(info, null, 2) }],
@@ -103,11 +120,15 @@ export function registerContainerTools(server: McpServer): void {
   server.tool(
     "pause_container",
     "Pause a running Docker container (suspends all processes)",
-    { id: z.string().describe("Container ID or name") },
-    async ({ id }) => {
-      await dockhandRequest(`/api/containers/${encodeURIComponent(id)}/pause?${envParam}`, {
-        method: "POST",
-      });
+    {
+      id: z.string().describe("Container ID or name"),
+      environmentId: environmentIdSchema,
+    },
+    async ({ id, environmentId }) => {
+      await dockhandRequest(
+        `/api/containers/${encodeURIComponent(id)}/pause?${envQuery(environmentId)}`,
+        { method: "POST" }
+      );
       return {
         content: [{ type: "text", text: `Container '${id}' paused.` }],
       };
@@ -117,11 +138,15 @@ export function registerContainerTools(server: McpServer): void {
   server.tool(
     "unpause_container",
     "Unpause a paused Docker container (resumes all processes)",
-    { id: z.string().describe("Container ID or name") },
-    async ({ id }) => {
-      await dockhandRequest(`/api/containers/${encodeURIComponent(id)}/unpause?${envParam}`, {
-        method: "POST",
-      });
+    {
+      id: z.string().describe("Container ID or name"),
+      environmentId: environmentIdSchema,
+    },
+    async ({ id, environmentId }) => {
+      await dockhandRequest(
+        `/api/containers/${encodeURIComponent(id)}/unpause?${envQuery(environmentId)}`,
+        { method: "POST" }
+      );
       return {
         content: [{ type: "text", text: `Container '${id}' unpaused.` }],
       };
@@ -131,11 +156,15 @@ export function registerContainerTools(server: McpServer): void {
   server.tool(
     "remove_container",
     "Remove a stopped Docker container",
-    { id: z.string().describe("Container ID or name") },
-    async ({ id }) => {
-      await dockhandRequest(`/api/containers/${encodeURIComponent(id)}?${envParam}`, {
-        method: "DELETE",
-      });
+    {
+      id: z.string().describe("Container ID or name"),
+      environmentId: environmentIdSchema,
+    },
+    async ({ id, environmentId }) => {
+      await dockhandRequest(
+        `/api/containers/${encodeURIComponent(id)}?${envQuery(environmentId)}`,
+        { method: "DELETE" }
+      );
       return {
         content: [{ type: "text", text: `Container '${id}' removed.` }],
       };
